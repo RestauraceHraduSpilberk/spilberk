@@ -126,6 +126,7 @@
         .price {
             font-weight: bold;
             color: #a1887f;
+            white-space: nowrap; /* Щоб ціна не переносилася */
         }
 
         /* Стилі елементів меню (для салатів, страв) */
@@ -157,10 +158,15 @@
         }
 
         /* Стилі таблиць (сніданки, напої) */
+        .table-container {
+            overflow-x: auto; /* Додаємо горизонтальний скролінг для таблиць на мобільних пристроях */
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            min-width: 500px; /* Забезпечуємо мінімальну ширину для скролінгу */
         }
 
         table th, table td {
@@ -178,6 +184,19 @@
         table tr:nth-child(even) {
             background-color: #f0f0f0;
         }
+        
+        /* Оформлення таблиці напоїв (щоб ціни були в окремій колонці) */
+        #napoje table td:nth-child(2) {
+            width: 1%; /* Для пробілу */
+            padding: 0;
+        }
+
+        #napoje table td:nth-child(3) {
+            font-weight: bold;
+            color: #a1887f;
+            white-space: nowrap;
+            text-align: right;
+        }
 
         /* Підвал */
         footer {
@@ -190,16 +209,43 @@
 
         /* Адаптивність (для менших екранів) */
         @media (max-width: 768px) {
-            .menu-columns {
-                flex-direction: column;
-                gap: 20px;
+            /* Загальні налаштування для мобільного */
+            header h1 {
+                font-size: 2em;
             }
+            section h2 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+            .subsection-title {
+                font-size: 1.3em;
+            }
+            
+            /* Навігація */
             nav ul {
                 flex-direction: column;
             }
             nav ul li a {
                 text-align: center;
                 border-bottom: 1px solid #6d5248;
+                padding: 10px 15px; /* Зменшуємо відступи */
+            }
+
+            /* Колонки */
+            .menu-columns {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            /* Елементи списку Varenyky/Hlavni Jidla/Zakusky/Napoje (зробити компактніше) */
+             ul li {
+                font-size: 1em; /* Трохи менший шрифт */
+            }
+            
+            /* Елементи меню (Салати, Завжди) */
+            .menu-items {
+                grid-template-columns: 1fr; /* Один стовпець */
+                gap: 20px;
             }
         }
     </style>
@@ -231,19 +277,21 @@
 
         <section id="snidane">
             <h2>Snídaně <small>od 9:00 do 11:00</small></h2>
-            <table>
-                <thead>
-                    <tr><th>Název jídla</th><th>Složení</th><th>Cena</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Anglická snídaně (1,3,10)</td><td>Vejce, slanina, rajče, fazole, toasty</td><td>190,-Kč</td></tr>
-                    <tr><td>Míchaná vajíčka s toustem (1,3,7)</td><td>Vejce, zeleninový salát, toasty, dresink</td><td>100,-Kč</td></tr>
-                    <tr><td>Sladké vafle s ovocem a šlehačkou (1,3,7)</td><td></td><td>100,-Kč</td></tr>
-                    <tr><td>Vafle se sýrem, slaninou a salátem (1,3,7)</td><td></td><td>150,-Kč</td></tr>
-                    <tr><td>Tvarohové knedlíky s jahodami (1,3,7)</td><td></td><td>180,-Kč</td></tr>
-                    <tr><td>Krupicová kaše s čokoládou a ovocem (1,7)</td><td></td><td>100,-Kč</td></tr>
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>Název jídla</th><th>Složení</th><th>Cena</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Anglická snídaně (1,3,10)</td><td>Vejce, slanina, rajče, fazole, toasty</td><td>190,-Kč</td></tr>
+                        <tr><td>Míchaná vajíčka s toustem (1,3,7)</td><td>Vejce, zeleninový salát, toasty, dresink</td><td>100,-Kč</td></tr>
+                        <tr><td>Sladké vafle s ovocem a šlehačkou (1,3,7)</td><td></td><td>100,-Kč</td></tr>
+                        <tr><td>Vafle se sýrem, slaninou a salátem (1,3,7)</td><td></td><td>150,-Kč</td></tr>
+                        <tr><td>Tvarohové knedlíky s jahodami (1,3,7)</td><td></td><td>180,-Kč</td></tr>
+                        <tr><td>Krupicová kaše s čokoládou a ovocem (1,7)</td><td></td><td>100,-Kč</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
         
         <section id="vzdy">
@@ -289,14 +337,16 @@
 
         <section id="pizza">
              <h2>Pizza</h2>
-            <table>
-                <tbody>
-                    <tr><td>PROSCIUTTO COTTO (1,7)</td><td>rajče, sýr gouda, prosciutto</td><td>289,-Kč</td></tr>
-                    <tr><td>QUATTRO FORMAGGI (1,7)</td><td>smetana, sýr gouda, niva, parmazán, mozzarella</td><td>289,-Kč</td></tr>
-                    <tr><td>MEXICANA (1,7)</td><td>rajče, sýr gouda, chorizo, klobáska, cibule, kozí roh, jalapeños paprička</td><td>269,-Kč</td></tr>
-                    <tr><td>SALÁMOVÁ (1,7)</td><td>rajče, sýr, mozzarella, klobása, kozí roh</td><td>250,-Kč</td></tr>
-                </tbody>
-            </table>
+             <div class="table-container">
+                <table>
+                    <tbody>
+                        <tr><td>PROSCIUTTO COTTO (1,7)</td><td>rajče, sýr gouda, prosciutto</td><td>289,-Kč</td></tr>
+                        <tr><td>QUATTRO FORMAGGI (1,7)</td><td>smetana, sýr gouda, niva, parmazán, mozzarella</td><td>289,-Kč</td></tr>
+                        <tr><td>MEXICANA (1,7)</td><td>rajče, sýr gouda, chorizo, klobáska, cibule, kozí roh, jalapeños paprička</td><td>269,-Kč</td></tr>
+                        <tr><td>SALÁMOVÁ (1,7)</td><td>rajče, sýr, mozzarella, klobása, kozí roh</td><td>250,-Kč</td></tr>
+                    </tbody>
+                </table>
+             </div>
         </section>
 
         <section id="salaty">
@@ -447,31 +497,35 @@
             <h3 class="subsection-title">Káva a kávové koktejly</h3>
             <div class="menu-columns">
                 <div class="column">
-                    <table>
-                        <tr><td>Espresso / Lungo</td><td></td><td>50,-Kč</td></tr>
-                        <tr><td>Cappuccino / Caffe Latte / Latte Macchiato</td><td></td><td>65/75/85,-Kč</td></tr>
-                        <tr><td>Vídeňská Káva</td><td></td><td>85,-Kč</td></tr>
-                        <tr><td>Káva Tonic / Flat White</td><td></td><td>90,-Kč</td></tr>
-                        <tr><td>Ledové Latte / Espresso se zmrzlinou</td><td></td><td>100,-Kč</td></tr>
-                        <tr><td>Ledová Káva</td><td></td><td>120,-Kč</td></tr>
-                        <tr><td>Capuorange / Bumble</td><td></td><td>90/100,-Kč</td></tr>
-                        <tr><td>Alžírská káva</td><td></td><td>120,-Kč</td></tr>
-                        <tr><td>Káva Baileys / Espresso Martini</td><td></td><td>140,-Kč</td></tr>
-                    </table>
+                    <div class="table-container">
+                        <table>
+                            <tr><td>Espresso / Lungo</td><td></td><td>50,-Kč</td></tr>
+                            <tr><td>Cappuccino / Caffe Latte / Latte Macchiato</td><td></td><td>65/75/85,-Kč</td></tr>
+                            <tr><td>Vídeňská Káva</td><td></td><td>85,-Kč</td></tr>
+                            <tr><td>Káva Tonic / Flat White</td><td></td><td>90,-Kč</td></tr>
+                            <tr><td>Ledové Latte / Espresso se zmrzlinou</td><td></td><td>100,-Kč</td></tr>
+                            <tr><td>Ledová Káva</td><td></td><td>120,-Kč</td></tr>
+                            <tr><td>Capuorange / Bumble</td><td></td><td>90/100,-Kč</td></tr>
+                            <tr><td>Alžírská káva</td><td></td><td>120,-Kč</td></tr>
+                            <tr><td>Káva Baileys / Espresso Martini</td><td></td><td>140,-Kč</td></tr>
+                        </table>
+                    </div>
                     <p class="small-note">Mléko +5,-Kč, Rostlinné mléko +20,-Kč, Med +15,-Kč, Šlehačka +25,-Kč.</p>
                 </div>
                 <div class="column">
                     <h3 class="subsection-title">Teplé nápoje</h3>
-                    <table>
-                        <tr><td>Horká čokoláda / se šlehačkou</td><td></td><td>90/115,-Kč</td></tr>
-                        <tr><td>Kakao / Babyccino (200 ml)</td><td></td><td>60/50,-Kč</td></tr>
-                        <tr><td>Grog / Svařák (200 ml)</td><td></td><td>85,-Kč</td></tr>
-                        <tr><td>Punč (jablko-pomeranč)</td><td></td><td>75,-Kč</td></tr>
-                        <tr><td>Matcha čaj / latte / mango latte / ice latte</td><td></td><td>60/90/120/100,-Kč</td></tr>
-                        <tr><td>Čaj z čerstvé máty / zázvoru</td><td></td><td>90,-Kč</td></tr>
-                        <tr><td>Čaj malina-rakytník / mango-ananas / třešňový (800 ml)</td><td></td><td>140,-Kč</td></tr>
-                        <tr><td>Balený čaj</td><td></td><td>40,-Kč</td></tr>
-                    </table>
+                    <div class="table-container">
+                        <table>
+                            <tr><td>Horká čokoláda / se šlehačkou</td><td></td><td>90/115,-Kč</td></tr>
+                            <tr><td>Kakao / Babyccino (200 ml)</td><td></td><td>60/50,-Kč</td></tr>
+                            <tr><td>Grog / Svařák (200 ml)</td><td></td><td>85,-Kč</td></tr>
+                            <tr><td>Punč (jablko-pomeranč)</td><td></td><td>75,-Kč</td></tr>
+                            <tr><td>Matcha čaj / latte / mango latte / ice latte</td><td></td><td>60/90/120/100,-Kč</td></tr>
+                            <tr><td>Čaj z čerstvé máty / zázvoru</td><td></td><td>90,-Kč</td></tr>
+                            <tr><td>Čaj malina-rakytník / mango-ananas / třešňový (800 ml)</td><td></td><td>140,-Kč</td></tr>
+                            <tr><td>Balený čaj</td><td></td><td>40,-Kč</td></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -500,19 +554,21 @@
             </div>
 
             <h3 class="subsection-title">Na čepu (Pivo a limonády)</h3>
-            <table>
-                <tbody>
-                    <tr><td>Starobrno Medium 0,5 l / 0,3 l (1)</td><td></td><td>60 / 40,-Kč</td></tr>
-                    <tr><td>Plzeň 0,5 l / 0,3 l (1)</td><td></td><td>80 / 55,-Kč</td></tr>
-                    <tr><td>Krušovice Královské černé 0,5 l / 0,3 l (1)</td><td></td><td>60 / 40,-Kč</td></tr>
-                    <tr><td>Štatl 12% 0,5 l / 0,3 l (1)</td><td></td><td>70 / 45,-Kč</td></tr>
-                    <tr><td>Cider Strongbow, apple 0,5 l / 0,3 l</td><td></td><td>55 / 35,-Kč</td></tr>
-                    <tr><td>Zlatopramen radler citrón 0,0% 0,5 l</td><td></td><td>55,-Kč</td></tr>
-                    <tr><td>Kofola original 0,5 l / 0,3 l</td><td></td><td>50 / 30,-Kč</td></tr>
-                    <tr><td>Limonáda, hrozen 0,5 l / 0,3 l</td><td></td><td>50 / 30,-Kč</td></tr>
-                    <tr><td>Limonáda, malinovka 0,5 l / 0,3 l</td><td></td><td>50 / 30,-Kč</td></tr>
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table>
+                    <tbody>
+                        <tr><td>Starobrno Medium 0,5 l / 0,3 l (1)</td><td></td><td>60 / 40,-Kč</td></tr>
+                        <tr><td>Plzeň 0,5 l / 0,3 l (1)</td><td></td><td>80 / 55,-Kč</td></tr>
+                        <tr><td>Krušovice Královské černé 0,5 l / 0,3 l (1)</td><td></td><td>60 / 40,-Kč</td></tr>
+                        <tr><td>Štatl 12% 0,5 l / 0,3 l (1)</td><td></td><td>70 / 45,-Kč</td></tr>
+                        <tr><td>Cider Strongbow, apple 0,5 l / 0,3 l</td><td></td><td>55 / 35,-Kč</td></tr>
+                        <tr><td>Zlatopramen radler citrón 0,0% 0,5 l</td><td></td><td>55,-Kč</td></tr>
+                        <tr><td>Kofola original 0,5 l / 0,3 l</td><td></td><td>50 / 30,-Kč</td></tr>
+                        <tr><td>Limonáda, hrozen 0,5 l / 0,3 l</td><td></td><td>50 / 30,-Kč</td></tr>
+                        <tr><td>Limonáda, malinovka 0,5 l / 0,3 l</td><td></td><td>50 / 30,-Kč</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
             <h3 class="subsection-title">V lahvi, plechovce</h3>
              <ul>
